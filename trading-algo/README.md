@@ -1,1 +1,0 @@
-# rimoli-mezaki trading algorithm
