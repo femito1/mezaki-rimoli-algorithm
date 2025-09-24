@@ -1,1 +1,0 @@
-# mezaki-rimoli-algorithm
