@@ -83,9 +83,12 @@ class RSI(Strategy):
             return []
 
         affordable = int(portfolio.cash // bar.close)
+        max_position = int((equity * max_w) // bar.close)
 
         if dq_t > 0:
-            dq_t = min(dq_t, affordable)
+            # Symmetric cap: do not exceed max_position and available cash
+            cap_long_additional = max(0, max_position - qty)
+            dq_t = min(dq_t, affordable, cap_long_additional)
 
         side = OrderSide.BUY if dq_t > 0 else OrderSide.SELL
         return [Order(symbol=self.symbol, side=side, quantity=abs(dq_t), type=OrderType.MARKET)]

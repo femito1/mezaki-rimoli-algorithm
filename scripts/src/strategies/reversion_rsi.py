@@ -90,7 +90,9 @@ class MR_RSI(Strategy):
         max_position = int((equity * max_w) // bar.close)
 
         if dq_t > 0:
-            dq_t = min(dq_t, affordable)
+            # Symmetric cap: long side limited by same max_w-based cap
+            cap_long_additional = max(0, max_position - qty)
+            dq_t = min(dq_t, affordable, cap_long_additional)
         if dq_t < 0:
             dq_t = max(dq_t, -max_position - qty)
         

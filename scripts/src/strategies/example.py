@@ -24,7 +24,10 @@ class BuyAndHold(Strategy):
     def on_bar(self, bar: Bar, history: pd.DataFrame, portfolio) -> Optional[List[Order]]:
         if not self.has_position and bar.symbol == self.symbol:
             self.has_position = True
-            return [Order(symbol=self.symbol, side=OrderSide.BUY, quantity=(portfolio.cash / bar.close), type=OrderType.MARKET)]
+            affordable = int(portfolio.cash // bar.close)
+            if affordable <= 0:
+                return []
+            return [Order(symbol=self.symbol, side=OrderSide.BUY, quantity=affordable, type=OrderType.MARKET)]
         return []
 
 
